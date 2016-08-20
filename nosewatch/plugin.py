@@ -17,7 +17,12 @@ class WatchPlugin(Plugin):
     def finalize(self, result):
         argv = list(self.sys.argv)
         argv.remove('--with-watch')
-        watchcmd = 'clear && ' + ' '.join(argv)
+
+        clear_command = 'clear'
+        if sys.platform == 'win32':
+            clear_command = 'cls'
+
+        watchcmd = clear_command + ' && ' + ' '.join(argv)
         call_args = ['watchmedo', 'shell-command', '-c',
             watchcmd, '-R', '-p', '*.py', '.']
         try:
